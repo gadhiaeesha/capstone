@@ -12,12 +12,50 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isLoading = true;
-  // List<Image> images = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: customAppBar(),
+      body: Padding(
+        padding: const EdgeInsets.all(35.0),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black, 
+              width: 2
+            ),
+          ),
+          child: IconButton(
+            icon: const Icon(Icons.music_note),
+            iconSize: 100,
+            onPressed: () {
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context) => const ImagePage()
+                ),
+              );
+            }
+          )
+        ),
+      )//Image.asset('assets/images/01.PNG'), //https://suragch.medium.com/how-to-include-images-in-your-flutter-app-863889fc0b29
+
+    );
+  }
+}
+
+class ImagePage extends StatelessWidget {
+  const ImagePage({Key? key}) : super(key: key);
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Image"),
+      ),
+      body: Center(
+        child: Image.asset('assets/images/01.PNG'),
+      )
     );
   }
 }
