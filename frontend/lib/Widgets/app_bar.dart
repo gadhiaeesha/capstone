@@ -10,8 +10,9 @@ AppBar customAppBar() {
           color: Colors.white,
       )
     ),
-    leading: const Icon(
-      Icons.menu,
+    leading: const IconButton(
+      onPressed: null, //come back to create navigation to menupage
+      icon: Icon(Icons.menu),
       color: Colors.white,
     ),
     elevation: 0.0,
