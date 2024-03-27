@@ -19,25 +19,31 @@ class _HomePageState extends State<HomePage> {
       appBar: customAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(35.0),
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.black, 
-              width: 2
-            ),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: IconButton(
-            icon: const Icon(Icons.music_note),
-            iconSize: 100,
-            onPressed: () {
-              Navigator.push(
-                context, 
-                MaterialPageRoute(builder: (context) => const ImagePage()
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.black, 
+                  width: 2
                 ),
-              );
-            }
-          )
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: IconButton(
+                icon: const Icon(Icons.music_note),
+                iconSize: 100,
+                onPressed: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => const ImagePage()
+                    ),
+                  );
+                }
+              )
+            ),
+            const SizedBox(height: 10),
+            const Text("Image #1"),
+          ],
         ),
       )//Image.asset('assets/images/01.PNG'), //https://suragch.medium.com/how-to-include-images-in-your-flutter-app-863889fc0b29
 
@@ -52,7 +58,7 @@ class ImagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Image"),
+        title: const Text("Image #1"),
       ),
       body: Center(
         child: Image.asset('assets/images/01.PNG'),
