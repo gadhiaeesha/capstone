@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-mn!nd5s8*%3j2(+alk+b8jty)@ckn#t91ffz@%be0x7k3_!0b%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["10.0.2.2", "127.0.0.1"]
 
 
 # Application definition
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "api",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [
@@ -51,10 +53,13 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "backend.urls"
 
+MDEIA_URL = "/media/"
+MEDIA_root = BASE_DIR / "media"
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / 'templates'], #new
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

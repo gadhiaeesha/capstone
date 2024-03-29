@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend/Constants/api.dart';
+import 'package:frontend/Pages/home_page.dart';
 import 'package:frontend/Widgets/app_bar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; 
@@ -10,8 +11,9 @@ import 'dart:io';
 class UploadPage extends StatelessWidget {
   const UploadPage({Key? key}) : super(key: key);
 
-  Future<void> _sendImage(String imagePath) async {
+  void _sendImage(String imagePath) async {
     try{
+      print(imagePath);
       //read image file as bytes
       File imageFile = File(imagePath);
       List<int> imageBytes = await imageFile.readAsBytes();
@@ -50,6 +52,7 @@ class UploadPage extends StatelessWidget {
     
     print("Sending Image File to Server");
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +62,11 @@ class UploadPage extends StatelessWidget {
       body: Center(
         child: OutlinedButton(
           onPressed: () {
-            _sendImage('assests/images/01.PNG');
+            _sendImage('assets/images/01.PNG');
+            Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context) => const HomePage()),
+            );
           },
           child: const Text(
             "Upload"
