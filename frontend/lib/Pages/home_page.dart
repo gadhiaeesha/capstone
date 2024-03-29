@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/Pages/image_page.dart';
+import 'package:frontend/Pages/upload_page.dart';
 import 'package:frontend/Widgets/app_bar.dart';
 //import 'package:frontend/Models/image.dart';
 
@@ -17,8 +19,44 @@ class _HomePageState extends State<HomePage> {
 
   //need a function to receive data from backend and display
 
-  void _showModal() {
-    showModalBottomSheet(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: customAppBar(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(35.0),
+          child: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.black, 
+                    width: 2
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: IconButton(
+                  icon: const Icon(Icons.music_note),
+                  iconSize: 100,
+                  onPressed: () {
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => const ImagePage()
+                      ),
+                    );
+                  }
+                )
+              ),
+              const SizedBox(height: 10),
+              const Text("Image #1"),
+            ],
+          ),
+        ),
+      ),//Image.asset('assets/images/01.PNG'), //https://suragch.medium.com/how-to-include-images-in-your-flutter-app-863889fc0b29
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
       context: context, 
       builder: (BuildContext context) { //context is variable which stores information of current state
         // ignore: sized_box_for_whitespace
@@ -42,7 +80,11 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(height: 70),
                 OutlinedButton(
                   onPressed: () {
-                    showDialog(
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => const UploadPage()),
+                    );
+                    /* showDialog(
                       context: context, 
                       builder: (BuildContext context) {
                         return AlertDialog(
@@ -59,10 +101,10 @@ class _HomePageState extends State<HomePage> {
 
                         );
                       }
-                    );
+                    ); */
                   },
                   child: const Text(
-                    "Photo Gallery",
+                    "Photo Gallery", //going to use this as a "Send Local Image" button instead of actual photo gallery for testing
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 20
@@ -108,47 +150,6 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: customAppBar(),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(35.0),
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black, 
-                    width: 2
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.music_note),
-                  iconSize: 100,
-                  onPressed: () {
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => const ImagePage()
-                      ),
-                    );
-                  }
-                )
-              ),
-              const SizedBox(height: 10),
-              const Text("Image #1"),
-            ],
-          ),
-        ),
-      ),//Image.asset('assets/images/01.PNG'), //https://suragch.medium.com/how-to-include-images-in-your-flutter-app-863889fc0b29
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showModal();
         },
         child: const Icon(Icons.add)
       ),
@@ -156,18 +157,4 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class ImagePage extends StatelessWidget {
-  const ImagePage({Key? key}) : super(key: key);
-  
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Image #1"),
-      ),
-      body: Center(
-        child: Image.asset('assets/images/01.PNG'),
-      )
-    );
-  }
-}
+
