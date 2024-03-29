@@ -1,0 +1,1 @@
+const String api = 'http://10.0.2.2:8000/'; //android device local/default is 10.0.2.2
