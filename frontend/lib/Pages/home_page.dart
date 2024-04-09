@@ -115,7 +115,14 @@ class _HomePageState extends State<HomePage> {
                           ) 
                           : const FlutterLogo(size: 160.0),
                       ElevatedButton(
-                        onPressed: () => getImage(ImageSource.gallery), 
+                        onPressed: () {
+                          getImage(ImageSource.gallery);
+                          /* Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context) => UploadPage(imagePath: _image!.path)
+                            ),
+                          ); */
+                        },  
                         child: Container(
                           width: 280,
                           child: const Text("Pick from Gallery"),
@@ -126,7 +133,6 @@ class _HomePageState extends State<HomePage> {
                           width: 280,
                           child: const Text("Pick from Camera"),
                         )),
-                      //_image != null ? Image.file(_image!, width: 250, height:250, fit: BoxFit.cover) : const Text("No Image Selected")
                       ElevatedButton(
                         onPressed: () => Navigator.push(
                             context, 
