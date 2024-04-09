@@ -3,13 +3,22 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/Constants/api.dart';
 import 'package:frontend/Widgets/app_bar.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; 
 import 'dart:io';
 
-class UploadPage extends StatelessWidget {
-  const UploadPage({Key? key}) : super(key: key);
+class UploadPage extends StatefulWidget {
+  const UploadPage({Key? key, required this.imagePath}) : super(key: key);
 
+  final String imagePath;
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _UploadPageState createState() => _UploadPageState();
+}
+
+class _UploadPageState extends State<UploadPage> {
   Future<void> _sendImage(String imagePath) async {
     try{
       //read image file as bytes
@@ -50,6 +59,9 @@ class UploadPage extends StatelessWidget {
     
     print("Sending Image File to Server");
   }
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,15 +69,23 @@ class UploadPage extends StatelessWidget {
         title: const Text("Upload Files"),
       ),
       body: Center(
-        child: OutlinedButton(
-          onPressed: () {
-            _sendImage('assests/images/01.PNG');
-          },
-          child: const Text(
-            "Upload"
-          ),
-        ), //here we can display photo gallery and utilize image picker
-      )
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Display the selected image
+            Image.file(
+              File(widget.imagePath),
+              width: 200,
+              height: 200,
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () => _sendImage(widget.imagePath),
+              child: const Text("Upload Image"),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

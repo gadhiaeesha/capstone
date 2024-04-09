@@ -1,7 +1,13 @@
+// ignore_for_file: sized_box_for_whitespace, duplicate_ignore, unnecessary_this
+
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:frontend/Pages/image_page.dart';
 import 'package:frontend/Pages/upload_page.dart';
 import 'package:frontend/Widgets/app_bar.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 //import 'package:frontend/Models/image.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,10 +20,32 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isLoading = true;
-
+  
   //need a function to upload image file to backend
 
   //need a function to receive data from backend and display
+
+  // As of right now, image picked from gallery is displayed, but only after exiting and re-opening modalBottomSheet
+  File? _image;
+  
+  Future getImage(ImageSource check) async {
+    //await requestPermission(); //Request permission before attempting to access camera/gallery
+    final image = await ImagePicker().pickImage(source: check);
+    try{
+      if(image == null) return;
+
+      final imageTemp = File(image.path);
+
+      setState(() {
+        this._image = imageTemp;
+      });
+    } 
+    catch(e) {
+      print(e);
+    }
+    
+    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,99 +85,67 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
-      context: context, 
-      builder: (BuildContext context) { //context is variable which stores information of current state
-        // ignore: sized_box_for_whitespace
-        return Container(
-          height: MediaQuery.of(context).size.height,
-          //color: Colors.grey,
-          child: Center(
-            child: Column(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text(
-                    "Upload Sheet Music",
-                    style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    )
-                  ),
-                ),
-                const SizedBox(height: 70),
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => const UploadPage()),
-                    );
-                    /* showDialog(
-                      context: context, 
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text("Check"),
-                          content: const Text("Checking"),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text("OK"),
+            context: context, 
+            builder: (BuildContext context) { //context is variable which stores information of current state
+              // ignore: sized_box_for_whitespace
+              return Container(
+                height: MediaQuery.of(context).size.height,
+                //color: Colors.grey,
+                child: Center(
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Text(
+                          "Upload Sheet Music",
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          )
+                        ),
+                      ),
+                      const SizedBox(height: 70),
+                      _image != null 
+                        ? Image.file(
+                            _image!, 
+                            width: 100, 
+                            height:100, 
+                            fit: BoxFit.cover
+                          ) 
+                          : const FlutterLogo(size: 160.0),
+                      ElevatedButton(
+                        onPressed: () => getImage(ImageSource.gallery), 
+                        child: Container(
+                          width: 280,
+                          child: const Text("Pick from Gallery"),
+                        )),
+                      ElevatedButton(
+                        onPressed: () => getImage(ImageSource.camera), 
+                        child: Container(
+                          width: 280,
+                          child: const Text("Pick from Camera"),
+                        )),
+                      //_image != null ? Image.file(_image!, width: 250, height:250, fit: BoxFit.cover) : const Text("No Image Selected")
+                      ElevatedButton(
+                        onPressed: () => Navigator.push(
+                            context, 
+                            MaterialPageRoute(builder: (context) => UploadPage(imagePath: _image!.path)
                             ),
-                          ],
-
-                        );
-                      }
-                    ); */
-                  },
-                  child: const Text(
-                    "Photo Gallery", //going to use this as a "Send Local Image" button instead of actual photo gallery for testing
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20
-                    )
-                  ),
-                   
-                ),
-                const SizedBox(height: 20),
-                OutlinedButton(
-                  onPressed: () {
-                    showDialog(
-                      context: context, 
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text("Check"),
-                          content: const Text("Checking"),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              child: const Text("OK"),
-                            ),
-                          ],
-
-                        );
-                      }
-                    );
-                  },
-                  child: const Text(
-                    "Camera",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20
-                    )
-                  ),
-                   
-                ),
-              ],
-              
-            )
-          )
-        );
-      },
-    );
+                          ), 
+                        // ignore: sized_box_for_whitespace
+                        child: Container(
+                          width: 280,
+                          child: const Text("Upload"),
+                        )
+                      ),
+                    ],
+                    
+                  )
+                )
+              );
+            },
+          );
         },
         child: const Icon(Icons.add)
       ),
@@ -157,4 +153,26 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-
+// ignore: non_constant_identifier_names
+Widget CustomButton({
+  required String title,
+  required IconData icon,
+  required VoidCallback onClick,
+}) {
+  // ignore: sized_box_for_whitespace
+  return Container(
+    width: 280,
+    child: ElevatedButton(
+      onPressed: () => {},
+      child: Row(
+        children: [
+          Icon(icon),
+          const SizedBox(
+            width: 20,
+          ),
+          Text(title)
+        ],
+      )
+    ),
+  );
+}
