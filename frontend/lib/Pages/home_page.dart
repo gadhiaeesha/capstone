@@ -43,8 +43,78 @@ class _HomePageState extends State<HomePage> {
     catch(e) {
       print(e);
     }
-    
-    
+  
+  }
+
+  void _showModal(){
+    showModalBottomSheet(
+      context: context, 
+      builder: (BuildContext context) { //context is variable which stores information of current state
+        // ignore: sized_box_for_whitespace
+        return Container(
+          height: MediaQuery.of(context).size.height,
+          //color: Colors.grey,
+          child: Center(
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    "Upload Sheet Music",
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    )
+                  ),
+                ),
+                const SizedBox(height: 70),
+                _image != null 
+                  ? Image.file(
+                      _image!, 
+                      width: 100, 
+                      height:100, 
+                      fit: BoxFit.cover
+                    ) 
+                    : const FlutterLogo(size: 160.0),
+                ElevatedButton(
+                  onPressed: () {
+                    getImage(ImageSource.gallery);
+                    /* Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => UploadPage(imagePath: _image!.path)
+                      ),
+                    ); */
+                  },  
+                  child: Container(
+                    width: 280,
+                    child: const Text("Pick from Gallery"),
+                  )),
+                ElevatedButton(
+                  onPressed: () => getImage(ImageSource.camera), 
+                  child: Container(
+                    width: 280,
+                    child: const Text("Pick from Camera"),
+                  )),
+                ElevatedButton(
+                  onPressed: () => Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => UploadPage(imagePath: _image!.path)
+                      ),
+                    ), 
+                  // ignore: sized_box_for_whitespace
+                  child: Container(
+                    width: 280,
+                    child: const Text("Upload"),
+                  )
+                ),
+              ],
+              
+            )
+          )
+        );
+      },
+    );
   }
 
   @override
@@ -84,74 +154,7 @@ class _HomePageState extends State<HomePage> {
       ),//Image.asset('assets/images/01.PNG'), //https://suragch.medium.com/how-to-include-images-in-your-flutter-app-863889fc0b29
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(
-            context: context, 
-            builder: (BuildContext context) { //context is variable which stores information of current state
-              // ignore: sized_box_for_whitespace
-              return Container(
-                height: MediaQuery.of(context).size.height,
-                //color: Colors.grey,
-                child: Center(
-                  child: Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text(
-                          "Upload Sheet Music",
-                          style: TextStyle(
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          )
-                        ),
-                      ),
-                      const SizedBox(height: 70),
-                      _image != null 
-                        ? Image.file(
-                            _image!, 
-                            width: 100, 
-                            height:100, 
-                            fit: BoxFit.cover
-                          ) 
-                          : const FlutterLogo(size: 160.0),
-                      ElevatedButton(
-                        onPressed: () {
-                          getImage(ImageSource.gallery);
-                          /* Navigator.push(
-                            context, 
-                            MaterialPageRoute(builder: (context) => UploadPage(imagePath: _image!.path)
-                            ),
-                          ); */
-                        },  
-                        child: Container(
-                          width: 280,
-                          child: const Text("Pick from Gallery"),
-                        )),
-                      ElevatedButton(
-                        onPressed: () => getImage(ImageSource.camera), 
-                        child: Container(
-                          width: 280,
-                          child: const Text("Pick from Camera"),
-                        )),
-                      ElevatedButton(
-                        onPressed: () => Navigator.push(
-                            context, 
-                            MaterialPageRoute(builder: (context) => UploadPage(imagePath: _image!.path)
-                            ),
-                          ), 
-                        // ignore: sized_box_for_whitespace
-                        child: Container(
-                          width: 280,
-                          child: const Text("Upload"),
-                        )
-                      ),
-                    ],
-                    
-                  )
-                )
-              );
-            },
-          );
+          _showModal();
         },
         child: const Icon(Icons.add)
       ),
