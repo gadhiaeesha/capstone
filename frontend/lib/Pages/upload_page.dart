@@ -80,7 +80,10 @@ class _UploadPageState extends State<UploadPage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => _sendImage(widget.imagePath),
+              onPressed: () {
+                //_sendImage(widget.imagePath);
+                Navigator.popUntil(context, ModalRoute.withName('/'));
+              },
               child: const Text("Upload Image"),
             ),
           ],

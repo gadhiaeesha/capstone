@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
       final imageTemp = File(image.path);
 
       setState(() {
-        this._image = imageTemp;
+        _image = imageTemp;
       });
     } 
     catch(e) {
