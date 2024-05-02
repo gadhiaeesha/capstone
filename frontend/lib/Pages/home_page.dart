@@ -1,11 +1,16 @@
-// ignore_for_file: sized_box_for_whitespace, duplicate_ignore, unnecessary_this
+// ignore_for_file: sized_box_for_whitespace, duplicate_ignore, unnecessary_this, avoid_print
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:frontend/Constants/api.dart';
+import 'package:frontend/Models/image.dart';
 import 'package:frontend/Pages/image_page.dart';
 import 'package:frontend/Pages/upload_page.dart';
 import 'package:frontend/Widgets/app_bar.dart';
+import 'package:frontend/Widgets/image_container.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 //import 'package:frontend/Models/image.dart';
@@ -20,10 +25,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool isLoading = true;
-  
-  //need a function to upload image file to backend
-
-  //need a function to receive data from backend and display
+  List<Images> myImages = [];
 
   // As of right now, image picked from gallery is displayed, but only after exiting and re-opening modalBottomSheet
   File? _image;
@@ -36,7 +38,7 @@ class _HomePageState extends State<HomePage> {
 
       final imageTemp = File(image.path);
 
-      setState(() {
+      setState(() { //figure out why state is not being updated immediately in app
         _image = imageTemp;
       });
     } 
@@ -117,10 +119,71 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void fetchData() async {
+    try {
+      http.Response response = await http.get(Uri.parse(api));
+      var data = json.decode(response.body);
+      data.forEach((image) {
+        Images i = Images(
+          id: image['id'],
+          title: image['title'],
+        );
+        myImages.add(i);
+      });
+      print(myImages.length);
+      setState(() {
+        isLoading = false;
+      });
+    } catch (e) {
+      print("Error is $e");
+    }
+  }
+
+  void _postData({String title = ""}) async {
+    try {
+      http.Response response = await http.post(
+        Uri.parse(api),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(<String, dynamic>{
+          "title": title,
+        }),
+      );
+      if (response.statusCode == 201) {
+        setState(() {
+          myImages = [];
+        });
+        fetchData();
+      } else {
+        print("Something went wrong");
+      }
+    } catch (e) {
+      print("Error is $e");
+    }
+  }
+
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(),
+      appBar: CustomAppBar(
+        onMenuItemClicked: (menuItem) {
+          // Handle menu item click here
+          print('Clicked on: $menuItem');
+        },
+      ),
+      drawer: SideMenu(
+        onMenuItemClicked: (menuItem) {
+          // Handle menu item click here
+          print('Clicked on: $menuItem');
+        },
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(35.0),
@@ -162,26 +225,3 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-// ignore: non_constant_identifier_names
-Widget CustomButton({
-  required String title,
-  required IconData icon,
-  required VoidCallback onClick,
-}) {
-  // ignore: sized_box_for_whitespace
-  return Container(
-    width: 280,
-    child: ElevatedButton(
-      onPressed: () => {},
-      child: Row(
-        children: [
-          Icon(icon),
-          const SizedBox(
-            width: 20,
-          ),
-          Text(title)
-        ],
-      )
-    ),
-  );
-}
