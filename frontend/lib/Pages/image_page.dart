@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:frontend/Widgets/app_bar.dart';
 
 class ImagePage extends StatefulWidget {
-  const ImagePage({Key? key}) : super(key: key);
+  final String title;
+  final String imagePath;
+
+  const ImagePage({Key? key, required this.title, required this.imagePath})
+      : super(key: key);
   
   @override
   // ignore: library_private_types_in_public_api
@@ -16,10 +20,10 @@ class _ImagePageState extends State<ImagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Image #1"),
+        title: Text(widget.title),
       ),
       body: Center(
-        child: Image.asset('assets/images/01.PNG'),
+        child: Image.asset(widget.imagePath),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(

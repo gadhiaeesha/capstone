@@ -41,6 +41,13 @@ class _HomePageState extends State<HomePage> {
       setState(() { //figure out why state is not being updated immediately in app
         _image = imageTemp;
       });
+
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+        context, 
+        MaterialPageRoute(builder: (context) => UploadPage(imagePath: _image!.path)
+        ),
+      );
     } 
     catch(e) {
       print(e);
@@ -71,29 +78,27 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const SizedBox(height: 70),
-                _image != null 
+                /* _image != null 
                   ? Image.file(
                       _image!, 
                       width: 100, 
                       height:100, 
                       fit: BoxFit.cover
                     ) 
-                    : const FlutterLogo(size: 160.0),
+                    : const FlutterLogo(size: 160.0), */
                 ElevatedButton(
                   onPressed: () {
                     getImage(ImageSource.gallery);
-                    /* Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => UploadPage(imagePath: _image!.path)
-                      ),
-                    ); */
+                    
                   },  
                   child: Container(
                     width: 280,
                     child: const Text("Pick from Gallery"),
                   )),
                 ElevatedButton(
-                  onPressed: () => getImage(ImageSource.camera), 
+                  onPressed: () {
+                    getImage(ImageSource.camera);
+                  }, 
                   child: Container(
                     width: 280,
                     child: const Text("Pick from Camera"),
@@ -119,7 +124,33 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void fetchData() async {
+  void populateList() {
+    List<String> imagePaths = [
+      'assets/images/01.PNG',
+      'assets/images/02.PNG',
+      'assets/images/03.PNG',
+      'assets/images/04.PNG',
+      'assets/images/05.PNG',
+      'assets/images/06.PNG',
+      'assets/images/07.PNG',
+      'assets/images/08.PNG',
+      'assets/images/09.PNG',
+      'assets/images/10.PNG',
+    ];
+
+    for(var i = 0; i < imagePaths.length; i++){
+      myImages.add(
+        Images(
+          id: i+1, 
+          title: "Image #${i+1}", 
+          path: imagePaths[i],
+        )
+      );
+    }
+    setState(() {});
+  }
+
+  /* void fetchData() async {
     try {
       http.Response response = await http.get(Uri.parse(api));
       var data = json.decode(response.body);
@@ -130,7 +161,7 @@ class _HomePageState extends State<HomePage> {
         );
         myImages.add(i);
       });
-      print(myImages.length);
+      print("Check 1 2");
       setState(() {
         isLoading = false;
       });
@@ -163,11 +194,26 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+    // ignore: non_constant_identifier_names
+    void delete_image(String id) async {
+    try {
+      http.Response response = await http.delete(Uri.parse("$api/$id"));
+      setState(() {
+        myImages = [];
+      });
+      fetchData();
+    } catch (e) {
+      print(e);
+    }
+  } */
+
   @override
   void initState() {
-    fetchData();
+    //fetchData();
+    populateList();
     super.initState();
-  }
+    
+  } 
 
   @override
   Widget build(BuildContext context) {
@@ -189,28 +235,21 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(35.0),
           child: Column(
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black, 
-                    width: 2
-                  ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: IconButton(
-                  icon: const Icon(Icons.music_note),
-                  iconSize: 100,
-                  onPressed: () {
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => const ImagePage()
-                      ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10.0,
+                  childAspectRatio: 0.8,
+                  children: myImages.map((e) {
+                    return ImageContainer(
+                      id: e.id,
+                      title: e.title,
+                      path: e.path,
                     );
-                  }
-                )
-              ),
-              const SizedBox(height: 10),
-              const Text("Image #1"),
+                  }).toList(),
+                ),
+              )
             ],
           ),
         ),

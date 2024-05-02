@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Image {
+class Images {
   int id;
   String title;
-  String type;
+  String path;
 
-  Image({
+  Images({
     required this.id,
     required this.title,
-    required this.type,
+    required this.path,
   });
 }
