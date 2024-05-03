@@ -8,7 +8,7 @@ import 'package:frontend/Constants/api.dart';
 import 'package:frontend/Models/image.dart';
 import 'package:frontend/Pages/image_page.dart';
 import 'package:frontend/Pages/upload_page.dart';
-import 'package:frontend/Widgets/app_bar.dart';
+import 'package:frontend/Widgets/homePage_app_bar.dart';
 import 'package:frontend/Widgets/image_container.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -78,18 +78,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const SizedBox(height: 70),
-                /* _image != null 
-                  ? Image.file(
-                      _image!, 
-                      width: 100, 
-                      height:100, 
-                      fit: BoxFit.cover
-                    ) 
-                    : const FlutterLogo(size: 160.0), */
                 ElevatedButton(
                   onPressed: () {
                     getImage(ImageSource.gallery);
-                    
                   },  
                   child: Container(
                     width: 280,
@@ -218,7 +209,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: HomeAppBar(
         onMenuItemClicked: (menuItem) {
           // Handle menu item click here
           print('Clicked on: $menuItem');

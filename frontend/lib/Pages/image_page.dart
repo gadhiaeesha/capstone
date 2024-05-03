@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/Widgets/app_bar.dart';
+import 'package:frontend/Widgets/homePage_app_bar.dart';
+import 'package:frontend/Widgets/subPage_app_bar.dart';
 
 class ImagePage extends StatefulWidget {
   final String title;
@@ -19,9 +20,7 @@ class _ImagePageState extends State<ImagePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      appBar: subPageAppBar(context, widget.title),
       body: Center(
         child: Image.asset(widget.imagePath),
       ),
@@ -36,6 +35,7 @@ class _ImagePageState extends State<ImagePage> {
                 });
               },
               icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
+              iconSize: 36,
             ),
           ],
         ),

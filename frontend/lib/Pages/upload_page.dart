@@ -2,7 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:frontend/Constants/api.dart';
-import 'package:frontend/Widgets/app_bar.dart';
+import 'package:frontend/Widgets/homePage_app_bar.dart';
+import 'package:frontend/Widgets/subPage_app_bar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; 
@@ -65,9 +66,7 @@ class _UploadPageState extends State<UploadPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Upload Files"),
-      ),
+      appBar: subPageAppBar(context, "Upload Page"),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

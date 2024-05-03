@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function(String) onMenuItemClicked;
 
-  const CustomAppBar({super.key, required this.onMenuItemClicked});
+  const HomeAppBar({super.key, required this.onMenuItemClicked});
 
   @override
   Widget build(BuildContext context) {

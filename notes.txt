@@ -5,3 +5,14 @@ features:
 - should display app name in center
 
 - should have user in far right which allows user to sign in/sign out (account stuff will be added in a later feature)
+
+- POTENTIAL ONLY: instead of displaying all uploaded sheet music in homepage,
+maybe display most recently viewed music and have recommendations for new music 
+based on uploaded music -> would need to use an api and access a library
+of sheet music, but it might be worth it
+
+Uploaded Images/Containers:
+
+- when an image is selected from gallery, it should upload to backend, 
+frontend refreshes by fetching data from backend, the new image is
+added to the myImages list with the id provided by backend.
