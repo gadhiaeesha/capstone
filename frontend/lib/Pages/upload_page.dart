@@ -20,7 +20,12 @@ class UploadPage extends StatefulWidget {
 }
 
 class _UploadPageState extends State<UploadPage> {
-  Future<void> _sendImage(String imagePath) async {
+  late String _title;
+  bool haveTitle = false;
+  
+  
+
+  Future<void> _sendImage(String imagePath, String title) async {
     try{
       //read image file as bytes
       File imageFile = File(imagePath);
@@ -32,6 +37,7 @@ class _UploadPageState extends State<UploadPage> {
       //prepare payload
       Map<String, dynamic> payload = {
         'image': base64Image,
+        'title': title,
       };
 
       //convert payload to JSON
@@ -61,7 +67,82 @@ class _UploadPageState extends State<UploadPage> {
     print("Sending Image File to Server");
   }
 
-  
+  void _showTitleDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Enter Piece Name"),
+        content: TextField(
+          onChanged: (value) {
+            setState(() {
+              _title = value;
+              haveTitle = _title.isNotEmpty;
+            });
+          },
+          decoration: const InputDecoration(
+            hintText: "Title",
+          ),
+        ),
+        actions: [
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), // Set rounded corners
+                    side: const BorderSide(color: Color(0xFF001133)), // Set outline color
+                    backgroundColor: Color(0xFF001133),
+                  ), 
+                  child: Container(
+                    height: 50,
+                    child: const Center(
+                      child: Text(
+                        "Enter",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10), // Add some space between buttons
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), // Set rounded corners
+                    side: const BorderSide(color: Color(0xFF001133)), // Set outline color
+                  ), 
+                  child: Container(
+                    height: 50,
+                    child: const Center(
+                      child: Text(
+                        "Back",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Color(0xFF001133)
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -72,19 +153,59 @@ class _UploadPageState extends State<UploadPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Display the selected image
-            Image.file(
-              File(widget.imagePath),
-              width: 200,
-              height: 200,
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20), // Add side margins
+              child: Flexible(
+                child: Image.file(
+                  File(widget.imagePath),
+                  // Remove width and height constraints
+                  fit: BoxFit.contain, // Keep aspect ratio and fit within the available space
+                ),
+              ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                //_sendImage(widget.imagePath);
-                Navigator.popUntil(context, ModalRoute.withName('/'));
-              },
-              child: const Text("Upload Image"),
-            ),
+            haveTitle
+              ? ElevatedButton(
+                  onPressed: () {
+                    _sendImage(widget.imagePath, _title);
+                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                  },
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), // Set rounded corners
+                    side: const BorderSide(color: const Color(0xFF001133)), // Set outline color
+                  ), 
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 280,
+                    child: const Text(
+                      "Upload Image",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: const Color(0xFF001133)
+                      ),
+                    ),
+                  )
+                )
+              : ElevatedButton(
+                  onPressed: () {
+                    _showTitleDialog();
+                  },
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)), // Set rounded corners
+                    side: const BorderSide(color: const Color(0xFF001133)), // Set outline color
+                  ), 
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: 280,
+                    child: const Text(
+                      "Enter Title",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: const Color(0xFF001133)
+                      ),
+                    ),
+                  )
+                ),
           ],
         ),
       ),
